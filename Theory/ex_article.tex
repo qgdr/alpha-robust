@@ -79,22 +79,24 @@ We will prove the convergence of this scheme.
   The stiffness matrix $A$ has the following properties:
   \begin{enumerate}
     \item The eigenvalues of $A$ are positive real numbers.
-    \item The eigenvectors of $A$ form an orthogonal basis of the space of solutions.
-    \item The eigenvectors of $A$ are orthogonal in space where $\langle u,v \rangle := uHv$.
+    \item $A$ is positive definite, which means that the eigenvalues of $\frac{A+A^T}{2}$ are positive.
+    \item The eigenvectors of $A$ are orthogonal in space where $\langle u,v \rangle := uHv$, 
+    where $H := \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right)$.
   \end{enumerate}
 \end{lemma}
 \begin{proof}
   Since
   \begin{equation}
-    A = H^{-1} D,
+    A = H^{-1} D = H^{-1/2} H^{-1/2} D H^{-1/2} H^{1/2} ,
   \end{equation}
-  where $H := \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right)$ and $D$ is symmetric positive definite, $H^{1/2}AH^{-1/2} = H^{-1/2}DH^{-1/2}$ is symmetric positive definite. Thus, the eigenvalues of $A$ are positive real numbers.
+  where $H^{-1/2} D H^{-1/2}$ is symmetric positive definite, $H^{-1/2} D H^{-1/2} = U\Lambda U^T$.
+  Thus,
+  \begin{equation}
+    A = H^{-1/2} U \Lambda U^T H^{1/2} = (H^{-1/2} U) \Lambda (H^{-1/2} U)^{-1}.
+  \end{equation}
 
-  The eigenvectors of $A$ form an orthogonal basis of the space of solutions. Let $v_i$ be an eigenvector of $A$ with eigenvalue $\lambda_i$. Then,
-  \begin{equation*}
-    \lambda_i v_i H v_j = v_i H A v_j = v_i D v_j = \lambda_j v_i H v_j,
-  \end{equation*}
-  Thus $v_i H v_j = 0$ for $i\neq j$.
+  The eigenvectors of $A$ form an orthogonal basis of the Hilbert space defined by $\langle u,v \rangle := uHv$. 
+  Let $v_i = H^{-1/2} u_i$ be an eigenvector of $A$ with eigenvalue $\lambda_i$.
 \end{proof}
 \textcolor{red}{We need to prove $\lambda_1 > c$ for some positive constant $c$.}
 
@@ -102,8 +104,9 @@ We will prove the convergence of this scheme.
 
 
 \section{Convergence}
+\textcolor{red}{
 We prove the shceme in convergence in the meaning of $L^2$ norm.
-Both $\|v\|_{2}^2 := \frac{T}{N}\sum_{i=1}^{2N-1} v_i^2 $ and $\|v\|_{2,h}^2 := \sum_{i=1}^{2N-1} v_i^2 \frac{h_i+h_{i+1}}{2}$ are bounded.
+$\|v\|_{2,h} := v_i^T H v_i$ is bounded.
 \begin{equation}
   \begin{aligned}
     E^{n} &= (I+\tau A)^{-1}E^{n-1} + (I+\tau A)^{-1}\tau R^{n} \\
@@ -132,6 +135,7 @@ Then
     & \le \|E_0\|_{2} + \max_{k} \|A^{-1} R^{n-k+1}\|_{2}
   \end{aligned}
 \end{equation}
+}
 
 
 

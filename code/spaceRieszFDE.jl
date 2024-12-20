@@ -48,7 +48,7 @@ end
 @show 1 < α < 2
 
 r = 4/α
-N = 40
+N = 50
 
 
 # function num_err(Ω, r, α, N)
@@ -89,7 +89,7 @@ println("A is OK")
 # ∂ₜu - Δᵅ/² u  = f    f ≡ 1
 
 T = 1
-M = 2
+M = 10
 τ = T // M
 
 # Uⁿ⁺¹ - Uⁿ + τ A Uⁿ⁺¹ = τ F
@@ -121,7 +121,7 @@ for i in 1:M
     plot!(x[1:2N-1], dEN[i, :], legend=false)
 end
 plot!(xi, EN[end,:], legend=false)
-ylims!(0, 0.0004)
+ylims!(0, EN[end,N])
 # plot(xi, dEN[end,:]./ maximum(abs.(dEN[end,:])) .|> abs, legend=false)
 
 # append!(dENend, dEN[end,:])
