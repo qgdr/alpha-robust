@@ -64,15 +64,6 @@ We study
   \frac{\partial u}{\partial t} +  (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
 \end{equation}
 
-Implicity scheme: Let $\tau = \frac{T}{M}$, $U^{n}, F^{n} \in \mathbb{R}^{2N-1}$,
-\begin{equation}
-  \frac{U^{n+1} - U^{n} }{\tau} + AU^{n+1} = F^{n+1}.
-\end{equation}
-Then
-\begin{equation}
-  (I+\tau A)E^{n+1} = E^{n} + \tau R^{n+1}.
-\end{equation}
-We will prove the convergence of this scheme.
 
 \section{Property of $A$}
 \begin{lemma}
@@ -82,6 +73,7 @@ We will prove the convergence of this scheme.
     \item $A$ is positive definite, which means that the eigenvalues of $\frac{A+A^T}{2}$ are positive.
     \item The eigenvectors of $A$ are orthogonal in space where $\langle u,v \rangle := uHv$, 
     where $H := \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right)$.
+    \item $(I+\tau A)^{-1} > O$ for any $\tau > 0$.
   \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -94,7 +86,7 @@ We will prove the convergence of this scheme.
   \begin{equation}
     A = H^{-1/2} U \Lambda U^T H^{1/2} = (H^{-1/2} U) \Lambda (H^{-1/2} U)^{-1}.
   \end{equation}
-
+  
   The eigenvectors of $A$ form an orthogonal basis of the Hilbert space defined by $\langle u,v \rangle := uHv$. 
   Let $v_i = H^{-1/2} u_i$ be an eigenvector of $A$ with eigenvalue $\lambda_i$.
 \end{proof}
@@ -102,11 +94,19 @@ We will prove the convergence of this scheme.
 
 
 
-
+\newpage
+Implicity scheme: Let $\tau = \frac{T}{M}$, $U^{n}, F^{n} \in \mathbb{R}^{2N-1}$,
+\begin{equation}
+  \frac{U^{n+1} - U^{n} }{\tau} + AU^{n+1} = F^{n+1}.
+\end{equation}
+Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
+\begin{equation}
+  (I+\tau A)E^{n+1} = E^{n} + \tau R^{n+1}.
+\end{equation}
+We will prove the convergence of this scheme.
 \section{Convergence}
-\textcolor{red}{
-We prove the shceme in convergence in the meaning of $L^2$ norm.
-$\|v\|_{2,h} := v_i^T H v_i$ is bounded.
+% We prove the shceme in convergence in the meaning of $L^2$ norm.
+% $\|v\|_{2,h} := v_i^T H v_i$ is bounded.
 \begin{equation}
   \begin{aligned}
     E^{n} &= (I+\tau A)^{-1}E^{n-1} + (I+\tau A)^{-1}\tau R^{n} \\
@@ -120,23 +120,34 @@ Assume that $|R^{n}| \le C h^{\min\{r\alpha/2, 2\}}(x_i^{-\alpha} + (2T-x_i)^{-\
     &= (\tau A) (I+\tau A)^{-k} (A^{-1} R^{n-k+1})
   \end{aligned}
 \end{equation}
-Since $A^{-1} R^{n-k+1}$ is bounded, $\|A^{-1} R^{n-k+1}\|_{2}$ is bounded. 
-Depose it by the basis $v_i$, we have
+Suppose that
 \begin{equation}
   \begin{aligned}
-    \|(I+\tau A)^{-k} \tau R^{n-k+1}\|_2 
-    &\le \frac{\tau \lambda_i}{(1+\tau \lambda_i)^{k}} \|A^{-1} R^{n-k+1}\|_{2}
+    |R^{n}| &\le |R| \\
+    &:= C h^{\min\{r\alpha/2, 2\}}(x_i^{-\alpha} + (2T-x_i)^{-\alpha}) \\
+    & \quad+ C(r-1) h^2 (T - \delta(x_i) + h_N)^{1-\alpha} + C \tau^{?}
+  \end{aligned}
+\end{equation}
+Since $0 < A^{-1} R \le C h^{\min}$,
+% Depose it by the basis $v_i$, we have
+\begin{equation}
+  \begin{aligned}
+    |(I+\tau A)^{-k} \tau R^{n-k+1}| 
+    \le (I+\tau A)^{-k} \tau R 
+    = \tau A (1+\tau A)^{-k} A^{-1} R
   \end{aligned}
 \end{equation}
 Then
 \begin{equation}
   \begin{aligned}
-    \|E^{n}\|_{2} &\le \|E_0\|_{2} + \sum_{k=1}^{n} \frac{\tau \lambda_1}{(1+\tau \lambda_1)^{k}} \|A^{-1} R^{n-k+1}\|_{2}  \\
-    & \le \|E_0\|_{2} + \max_{k} \|A^{-1} R^{n-k+1}\|_{2}
+    |E^{n}| &\le |(I+\tau A)^{-n}E^{0}| + \sum_{k=1}^{n} \tau A (1+\tau A)^{-k} A^{-1} R  \\
+    &= |(I+\tau A)^{-n}E^{0}| + \left(I - (I+\tau A)^{-n}\right) A^{-1} R.
   \end{aligned}
 \end{equation}
-}
-
+Since $A$ is diagonally dominant, $\|(I+\tau A)^{-1} E\|_\infty \le \|E\|_\infty$, we have
+\begin{equation}
+  \|E^{n}\|_\infty \le \|E_{0}\|_\infty + 2 \|A^{-1} R\|_\infty.
+\end{equation}
 
 
 

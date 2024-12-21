@@ -48,7 +48,7 @@ end
 @show 1 < α < 2
 
 r = 4/α
-N = 50
+N = 10
 
 
 # function num_err(Ω, r, α, N)
@@ -89,7 +89,7 @@ println("A is OK")
 # ∂ₜu - Δᵅ/² u  = f    f ≡ 1
 
 T = 1
-M = 10
+M = 50
 τ = T // M
 
 # Uⁿ⁺¹ - Uⁿ + τ A Uⁿ⁺¹ = τ F
