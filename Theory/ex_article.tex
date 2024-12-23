@@ -63,7 +63,15 @@ We study
 \begin{equation}
   \frac{\partial u}{\partial t} +  (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
 \end{equation}
-
+Implicity scheme: Let $\tau = \frac{T}{M}$, $U^{n}, F^{n} \in \mathbb{R}^{2N-1}$,
+\begin{equation}
+  \frac{U^{n+1} - U^{n} }{\tau} + AU^{n+1} = F^{n+1}.
+\end{equation}
+Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
+\begin{equation}
+  (I+\tau A)E^{n+1} = E^{n} + \tau R^{n+1}.
+\end{equation}
+We will prove the convergence of this scheme.
 
 \section{Property of $A$}
 \begin{lemma}
@@ -93,20 +101,77 @@ We study
 \textcolor{red}{We need to prove $\lambda_1 > c$ for some positive constant $c$.}
 
 
+\section{Regularity}
+\begin{lemma}
+  If
+  \begin{equation}
+    \left|\frac{\partial^{l} u}{\partial x^{l}}\right| \le \delta(x)^{\alpha/2-l}, \quad x \in \Omega,
+  \end{equation}
+  then
+  \begin{equation}
+    \left|-\frac{d^{l}}{dx^{l}} I^{2-\alpha} u \right| \le C \frac{\kappa_\alpha(\alpha-1)}{\Gamma(3-\alpha)} \delta(x)^{-\alpha/2 - (l-2)}, \quad l=1,2,3,4, \quad x \in \Omega,
+  \end{equation}
+  where $C$ is independent of $\alpha$.
+\end{lemma}
+\begin{proof}
+  \begin{equation}
+    \begin{aligned}
+      \frac{d^{l}}{dx^{l}} I^{2-\alpha} u &= \frac{\kappa_\alpha}{\Gamma(2-\alpha)} \Biggl(
+        (1-\alpha)\cdots(1-(l-1)-\alpha) \left(\int_0^{x/2} u(y) (x-y)^{1-l-\alpha} dy + (-1)^{l} \int_{T+x/2}^{2T} u(y) (y-x)^{1-l-\alpha} dy\right)  \\
+        &\quad + \sum_{k=1}^{l-1} (1-\alpha)\cdots(1-(k-1)-\alpha) \left(\frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(x/2) \left(\frac{x}{2}\right)^{1-k-\alpha} - (-1)^{k}\frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(T+x/2) \left(T+\frac{x}{2}\right)^{1-k-\alpha}   \right) \\
+        &\quad + (1-\alpha) \left(\int_{x/2}^{x} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (x-y)^{-\alpha} - \int_{x}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} \right)
+        \Biggl)
+    \end{aligned}
+  \end{equation}
+  Set $x\le T$, we have
+  \begin{equation*}
+    \left|\int_0^{x/2} u(y) (x-y)^{1-l-\alpha} dy\right| 
+    \le 2^{\alpha+l-1} \int_0^{x/2} y^{\alpha/2} x^{1-l-\alpha} dy
+    \simeq x^{-\alpha/2 - (l-2)}
+  \end{equation*}
+  \begin{equation*}
+    \frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(x/2) \left(\frac{x}{2}\right)^{1-k-\alpha}
+    \lesssim  x^{-\alpha/2 - (l-2)}
+  \end{equation*}
+  \begin{equation*}
+    \begin{aligned}
+      &\int_{x/2}^{x} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (x-y)^{-\alpha} - \int_{x}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha}  \\
+      & \quad = \int_{0}^{x/2} \left(\frac{\partial ^{l-1}}{\partial x^{l-1}} u(x-z)- \frac{\partial ^{l-1}}{\partial x^{l-1}} u(x+z)\right) z^{-\alpha} dz       - \int_{x+x/2}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} dy
+    \end{aligned}
+  \end{equation*}
+  While
+  \begin{equation*}
+    \begin{aligned}
+      &\left|\int_{0}^{x/2} \left(\frac{\partial ^{l-1}}{\partial x^{l-1}} u(x-z)- \frac{\partial ^{l-1}}{\partial x^{l-1}} u(x+z)\right) z^{-\alpha} dz \right|  \\
+      &\quad =  2\int_{0}^{x/2} \frac{\partial ^{l}}{\partial x^{l}} u(\xi)  z^{1-\alpha}  dz 
+      \le \left(\frac{x}{2}\right)^{\alpha/2-l} 2\int_{0}^{x/2} z^{1-\alpha}  dz \simeq \frac{1}{2-\alpha} x^{-\alpha/2 - (l-2)}
+    \end{aligned}
+  \end{equation*}
+  \begin{equation*}
+    \begin{aligned}
+      &\int_{x+x/2}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} dy \\
+      &\quad \le \int_{x+x/2}^{T+x/2} y^{\alpha/2-(l-1)} y^{-\alpha} dy
+      \lesssim  \begin{cases}
+        \frac{1}{2-\alpha} T^{-\alpha/2 - (l-2)}, & l=1, \\
+        \frac{1}{\alpha/2+l-1} x^{-\alpha/2 - (l-2)} , & l=2,3,4.
+      \end{cases}
+    \end{aligned}
+  \end{equation*}
+  % \begin{equation}
+  %   \begin{aligned}
+  %     \left|\frac{d^{l}}{dx^{l}} I^{2-\alpha} u(x) \right|
+  %     &\le \frac{\kappa_\alpha (\alpha-1)}{\Gamma(2-\alpha)} \Biggl(\cdots \Biggl)
+  %   \end{aligned}
+  % \end{equation}
+\end{proof}
 
-\newpage
-Implicity scheme: Let $\tau = \frac{T}{M}$, $U^{n}, F^{n} \in \mathbb{R}^{2N-1}$,
-\begin{equation}
-  \frac{U^{n+1} - U^{n} }{\tau} + AU^{n+1} = F^{n+1}.
-\end{equation}
-Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
-\begin{equation}
-  (I+\tau A)E^{n+1} = E^{n} + \tau R^{n+1}.
-\end{equation}
-We will prove the convergence of this scheme.
+\section{truncation error}
+
+
 \section{Convergence}
 % We prove the shceme in convergence in the meaning of $L^2$ norm.
 % $\|v\|_{2,h} := v_i^T H v_i$ is bounded.
+
 \begin{equation}
   \begin{aligned}
     E^{n} &= (I+\tau A)^{-1}E^{n-1} + (I+\tau A)^{-1}\tau R^{n} \\
@@ -148,6 +213,51 @@ Since $A$ is diagonally dominant, $\|(I+\tau A)^{-1} E\|_\infty \le \|E\|_\infty
 \begin{equation}
   \|E^{n}\|_\infty \le \|E_{0}\|_\infty + 2 \|A^{-1} R\|_\infty.
 \end{equation}
+
+\textcolor{red}{
+\begin{lemma}
+  $A^{-1} R$ is bounded by $C \left(h^{\min\{r\alpha/2, 2\}} + \tau^{?}\right)$, where $C$ is a constant independent of $h, \alpha$.
+\end{lemma}
+}
+
+
+\section{Caputo-Riesz}
+$\gamma\in (0,1)$
+\begin{equation}
+  D_t^\gamma u + (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
+\end{equation}
+where
+\begin{equation}
+  \begin{aligned}
+    D_t^\gamma u(x, t) = \frac{1}{\Gamma(1-\gamma)} \int_0^t \frac{\partial u(x, s)}{\partial s} (t-s)^{-\gamma} ds
+  \end{aligned}
+\end{equation}
+\begin{equation}
+  \begin{aligned}
+    D_N^\gamma u(x, t_n) 
+    &= \sum_{k=1}^{n} \frac{1}{\Gamma(2-\gamma)}  \left( u(x,t_k) -  u(x,t_{k-1})\right) \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_k)^{1-\gamma}}{\tau_k} \\
+    &= \frac{d_{n,n}}{\Gamma(2-\gamma)} u(x, t_n) - \sum_{k=1}^{n-1} \frac{d_{n, k+1} - d_{n,k}}{\Gamma(2-\gamma)} u(x, t_{k}) - \frac{d_{n,1}}{\Gamma(2-\gamma)} u(x, t_0),
+  \end{aligned}
+\end{equation}
+where
+\begin{equation}
+  d_{n,k} = \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_{k})^{1-\gamma}}{\tau_{k}}
+  % \simeq (1-\gamma)(t_n-t_{k-1})^{-\gamma},
+\end{equation}
+$\quad d_{n,n} = \tau_n^{-\gamma}, \quad d_{n,k+1} \ge d_{n,k}$.
+
+Numerical scheme:
+\begin{equation}
+  D_N^\gamma U^n + A U^{n} = F^{n}
+\end{equation}
+We have
+\begin{equation}
+  \begin{aligned}
+    \left(\frac{d_{n,n}}{\Gamma(2-\gamma)}I + A \right) E^n = \sum_{k=1}^{n-1} \frac{d_{n, k+1} - d_{n,k}}{\Gamma(2-\gamma)} E^{k} + \frac{d_{n,1}}{\Gamma(2-\gamma)} E^0 + R^{n}
+  \end{aligned}
+\end{equation}
+
+
 
 
 

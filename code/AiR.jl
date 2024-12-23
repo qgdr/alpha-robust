@@ -42,7 +42,7 @@ end
 Ω = (0, 1)
 
 
-α = 2-1//4   #1+ 9 // 10
+α = 2-1//100000   #1+ 9 // 10
 α = Float(α)
 
 @show 1 < α < 2
@@ -86,18 +86,6 @@ end
 println("A is OK")
 
 
-# truncation error
-
-U = u_exact.(x, α)[1:2N-1]
-F = A * U
-
-# plot(x[1:2N-1], F)
-xi = x[1:2N-1]
-U_s = A \ ones(2N - 1)
-
-## tunc_err
-R = F .- 1
-
 function te_f1(x, α)
     return x^(-α) + (1 - x)^(-α)
 end
@@ -109,4 +97,4 @@ end
 TE = te_f1.(xi, α) .+ te_f2.(xi, α)
 Som = A \ TE
 
-plot(xi, TE)
+plot(xi, Som, legend=false)

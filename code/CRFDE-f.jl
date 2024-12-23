@@ -5,18 +5,18 @@ using OffsetArrays
 using Cubature
 using Plots
 
-Float = BigFloat
+Float = Float64
 function function_f(x, α)
-    f = 1
+    f = sin(π * x)
     return f
 end
 
-function u_exact(x, α)
-    α = Float(α)
-    CC = 2^(-α) * gamma(1 / 2) / (gamma(1 + α / 2) * gamma((1 + α) / 2))
-    ut = CC * (x * (1 - x))^(α / 2)
-    return ut
-end
+# function u_exact(x, α)
+#     α = Float(α)
+#     CC = 2^(-α) * gamma(1 / 2) / (gamma(1 + α / 2) * gamma((1 + α) / 2))
+#     ut = CC * (x * (1 - x))^(α / 2)
+#     return ut
+# end
 
 
 function Gridmesh(Ω, N, r)
@@ -42,12 +42,12 @@ end
 Ω = (0, 1)
 
 
-α = 2-1//4   #1+ 9 // 10
+α = 2- 1 // 80
 α = Float(α)
 
 @show 1 < α < 2
 
-r = 4/α
+r = 1 # 4/α
 N = 50
 
 
@@ -88,25 +88,7 @@ println("A is OK")
 
 # truncation error
 
-U = u_exact.(x, α)[1:2N-1]
-F = A * U
-
-# plot(x[1:2N-1], F)
 xi = x[1:2N-1]
-U_s = A \ ones(2N - 1)
+F = function_f.(xi, α)
 
-## tunc_err
-R = F .- 1
-
-function te_f1(x, α)
-    return x^(-α) + (1 - x)^(-α)
-end
-
-function te_f2(x, α)
-    return (abs(1//2-x)+ 1//N)^(1-α)
-end
-
-TE = te_f1.(xi, α) .+ te_f2.(xi, α)
-Som = A \ TE
-
-plot(xi, TE)
+U_s = A \ F
