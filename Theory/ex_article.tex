@@ -236,15 +236,15 @@ where
   \begin{aligned}
     D_N^\gamma u(x, t_n) 
     &= \sum_{k=1}^{n} \frac{1}{\Gamma(2-\gamma)}  \left( u(x,t_k) -  u(x,t_{k-1})\right) \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_k)^{1-\gamma}}{\tau_k} \\
-    &= \frac{d_{n,n}}{\Gamma(2-\gamma)} u(x, t_n) - \sum_{k=1}^{n-1} \frac{d_{n, k+1} - d_{n,k}}{\Gamma(2-\gamma)} u(x, t_{k}) - \frac{d_{n,1}}{\Gamma(2-\gamma)} u(x, t_0),
+    &= d_{n,n} u(x, t_n) - \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k}) u(x, t_{k}) - d_{n,1} u(x, t_0),
   \end{aligned}
 \end{equation}
 where
 \begin{equation}
-  d_{n,k} = \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_{k})^{1-\gamma}}{\tau_{k}}
+  d_{n,k} = \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_{k})^{1-\gamma}}{\Gamma(2-\gamma)\tau_{k}} \quad \text{for} \quad 1\le k \le n \quad \text{and} \quad d_{n,0} = 0,
   % \simeq (1-\gamma)(t_n-t_{k-1})^{-\gamma},
 \end{equation}
-$\quad d_{n,n} = \tau_n^{-\gamma}, \quad d_{n,k+1} \ge d_{n,k}$.
+$\quad d_{n,n} = \frac{\tau_n^{-\gamma}}{\Gamma(2-\gamma)}, \quad d_{n,k+1} \ge d_{n,k}$.
 
 Numerical scheme:
 \begin{equation}
@@ -253,9 +253,56 @@ Numerical scheme:
 We have
 \begin{equation}
   \begin{aligned}
-    \left(\frac{d_{n,n}}{\Gamma(2-\gamma)}I + A \right) E^n = \sum_{k=1}^{n-1} \frac{d_{n, k+1} - d_{n,k}}{\Gamma(2-\gamma)} E^{k} + \frac{d_{n,1}}{\Gamma(2-\gamma)} E^0 + R^{n}
+    \left(d_{n,n} I + A \right) E^n = \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k}) E^{k} + d_{n,1} E^0 + R^{n}
   \end{aligned}
 \end{equation}
+
+
+
+Define the matrices $\Theta_{n,j}$, for $n = 1, 2 . . . , N$ and $j = 0, 1, 2, . . . , n - 1$ by
+\begin{equation} \label{eq:def_Theta}
+  \begin{gathered}
+    \Theta_{n,n} = (d_{n,n} + A)^{-1} , \quad \Theta_{0,0} = I, \quad
+    \Theta_{n,j} = \sum_{k=j}^{n-1} (d_{n, k+1} - d_{n,k})\Theta_{n,n} \Theta_{k,j}. %\quad 1\le j <n 
+    % \Theta_{n,0} = d_{n,1} (d_{n,n} + A)^{-1} + \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k})(d_{n,n} + A)^{-1} \Theta_{k,0}
+  \end{gathered}
+\end{equation}
+Observe that $\Theta_{n,j} > 0$ for all $n, j$.
+
+\begin{lemma}
+  \begin{equation}
+    \begin{aligned}
+      E^n = \sum_{j=1}^{n} \Theta_{n,j} R^{j} + \Theta_{n,0} E^{0}
+    \end{aligned}
+  \end{equation}
+\end{lemma}
+
+\begin{lemma}
+  Let the parameter $\beta$ satisfy $\beta\le r_t \gamma$. Then for $n=1,2,..., N$, one has
+  \begin{equation} \label{eq:sum_Theta}
+    \sum_{j=1}^n \Theta_{n,j} \le A^{-1}
+    % \sum_{j=1}^n j^{-\beta} \Theta_{n,j} \le A^{-1}
+  \end{equation}
+\end{lemma}
+\begin{proof}
+  Use induction on $n$. When $n=1$, then
+  $
+    \sum_{j=1}^1  \Theta_{1,j} = \Theta_{1,1}
+  $.
+  Next, assume that \eqref{eq:sum_Theta} holds for $k=1, 2,..., m-1(2\le m \le N)$. 
+  We want to prove \eqref{eq:sum_Theta} for $n=m$.
+  Invoking \eqref{eq:def_Theta} and interchanging the order of summation,
+  \begin{equation*}
+    \begin{aligned}
+      \sum_{j=1}^m  \Theta_{m,j}
+      &=  \Theta_{m,m} + \sum_{j=1}^{m-1}  \sum_{k=j}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m} \Theta_{k,j} \\
+      &= \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}  \sum_{j=1}^{k} \Theta_{k,j} \\
+      & \le  \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}   A^{-1} \\
+      &= \Theta_{m,m} + (d_{m, m} - d_{m,1})\Theta_{m,m}   A^{-1} \\
+      &= A^{-1} - d_{m,1} \Theta_{m,m}   A^{-1} \le A^{-1}
+    \end{aligned}
+  \end{equation*}
+\end{proof}
 
 
 
