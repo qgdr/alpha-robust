@@ -63,6 +63,135 @@ We study
 \begin{equation}
   \frac{\partial u}{\partial t} +  (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
 \end{equation}
+\begin{equation}
+  D_t^\gamma u + (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
+\end{equation}
+where
+\begin{equation}
+  \begin{aligned}
+    D_t^\gamma u(x, t) = \frac{1}{\Gamma(1-\gamma)} \int_0^t \frac{\partial u(x, s)}{\partial s} (t-s)^{-\gamma} ds
+  \end{aligned}
+\end{equation}
+\begin{equation}
+  \begin{aligned}
+    (-\Delta)^{\frac{\alpha}{2}} u(x,t) = \frac{1}{2\cos(\alpha\pi/2) \Gamma(2-\alpha)} \int_{0}^{2L} u(y, t) |x-y|^{1-\alpha} dy
+  \end{aligned}
+\end{equation}
+where $\gamma \in (0,1)$, $\alpha \in (1,2)$.
+
+
+% We will prove the convergence of this scheme.
+\section{Regularity of the solution}
+For the space-time fractional diffusion equation, it was first assumed that the solution regularity
+satisfies
+\begin{subequations} \label{eq:regularity}
+  \begin{equation} \label{subeq:regularity-on-x}
+    \left|\frac{\partial^{l} u}{\partial t^l}(x,t)\right| \le C(1+t^{\gamma-l}) \quad for \quad l = 0,1,2,
+  \end{equation}
+  \begin{equation} \label{subeq:regularity-of-Au-on-x}
+    \left|\frac{\partial^{l} }{\partial x^l} (-\Delta)^{\alpha/2} u(x,t) \right| \le C \delta(x)^{-\alpha/2-l} \quad for \quad l = 0,1,2,
+  \end{equation}
+  \begin{equation} \label{subeq:regularity-on-t}
+    \left|\frac{\partial^{l} u}{\partial x^l}(x,t)\right| \le C\delta(x)^{\alpha/2-l} \quad for \quad l = 0,1,2,3,4,
+  \end{equation}
+\end{subequations}
+for all $(x,t) \in (0, 2L)\times (0,T]$.
+\begin{remark}
+  \eqref{subeq:regularity-of-Au-on-x} can be derived from \eqref{subeq:regularity-on-x} by
+  \begin{equation*}
+    \begin{aligned}
+      I^{2-\alpha} u(x,t) &= \int_{0}^{x/2} + \int_{L+x/2}^{2L} u(y,t) \frac{|x-y|^{1-\alpha}}{\Gamma(2-\alpha)} dy \\
+      &\quad + \int_{0}^{x/2} \left(u(x-z,t) + u(x+z,t) \right) \frac{z^{1-\alpha}}{\Gamma(2-\alpha)} dy \\
+      &\quad + \int_{x+x/2}^{L+x/2} u(y,t) \frac{|y-x|^{1-\alpha}}{\Gamma(2-\alpha)} dy
+    \end{aligned}
+  \end{equation*}
+\end{remark}
+
+
+% \begin{lemma}
+%   If
+%   \begin{equation}
+%     \left|\frac{\partial^{l} u}{\partial x^{l}}\right| \le \delta(x)^{\alpha/2-l}, \quad x \in \Omega,
+%   \end{equation}
+%   then
+%   \begin{equation}
+%     \left|-\frac{d^{l}}{dx^{l}} I^{2-\alpha} u \right| \le C \frac{\kappa_\alpha(\alpha-1)}{\Gamma(3-\alpha)} \delta(x)^{-\alpha/2 - (l-2)}, \quad l=1,2,3,4, \quad x \in \Omega,
+%   \end{equation}
+%   where $C$ is independent of $\alpha$.
+% \end{lemma}
+% \begin{proof}
+%   \begin{equation}
+%     \begin{aligned}
+%       \frac{d^{l}}{dx^{l}} I^{2-\alpha} u &= \frac{\kappa_\alpha}{\Gamma(2-\alpha)} \Biggl(
+%         (1-\alpha)\cdots(1-(l-1)-\alpha) \left(\int_0^{x/2} u(y) (x-y)^{1-l-\alpha} dy + (-1)^{l} \int_{T+x/2}^{2T} u(y) (y-x)^{1-l-\alpha} dy\right)  \\
+%         &\quad + \sum_{k=1}^{l-1} (1-\alpha)\cdots(1-(k-1)-\alpha) \left(\frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(x/2) \left(\frac{x}{2}\right)^{1-k-\alpha} - (-1)^{k}\frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(T+x/2) \left(T+\frac{x}{2}\right)^{1-k-\alpha}   \right) \\
+%         &\quad + (1-\alpha) \left(\int_{x/2}^{x} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (x-y)^{-\alpha} - \int_{x}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} \right)
+%         \Biggl)
+%     \end{aligned}
+%   \end{equation}
+%   Set $x\le T$, we have
+%   \begin{equation*}
+%     \left|\int_0^{x/2} u(y) (x-y)^{1-l-\alpha} dy\right| 
+%     \le 2^{\alpha+l-1} \int_0^{x/2} y^{\alpha/2} x^{1-l-\alpha} dy
+%     \simeq x^{-\alpha/2 - (l-2)}
+%   \end{equation*}
+%   \begin{equation*}
+%     \frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(x/2) \left(\frac{x}{2}\right)^{1-k-\alpha}
+%     \lesssim  x^{-\alpha/2 - (l-2)}
+%   \end{equation*}
+%   \begin{equation*}
+%     \begin{aligned}
+%       &\int_{x/2}^{x} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (x-y)^{-\alpha} - \int_{x}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha}  \\
+%       & \quad = \int_{0}^{x/2} \left(\frac{\partial ^{l-1}}{\partial x^{l-1}} u(x-z)- \frac{\partial ^{l-1}}{\partial x^{l-1}} u(x+z)\right) z^{-\alpha} dz       - \int_{x+x/2}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} dy
+%     \end{aligned}
+%   \end{equation*}
+%   While
+%   \begin{equation*}
+%     \begin{aligned}
+%       &\left|\int_{0}^{x/2} \left(\frac{\partial ^{l-1}}{\partial x^{l-1}} u(x-z)- \frac{\partial ^{l-1}}{\partial x^{l-1}} u(x+z)\right) z^{-\alpha} dz \right|  \\
+%       &\quad =  2\int_{0}^{x/2} \frac{\partial ^{l}}{\partial x^{l}} u(\xi)  z^{1-\alpha}  dz 
+%       \le \left(\frac{x}{2}\right)^{\alpha/2-l} 2\int_{0}^{x/2} z^{1-\alpha}  dz \simeq \frac{1}{2-\alpha} x^{-\alpha/2 - (l-2)}
+%     \end{aligned}
+%   \end{equation*}
+%   \begin{equation*}
+%     \begin{aligned}
+%       &\int_{x+x/2}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} dy \\
+%       &\quad \le \int_{x+x/2}^{T+x/2} y^{\alpha/2-(l-1)} y^{-\alpha} dy
+%       \lesssim  \begin{cases}
+%         \frac{1}{2-\alpha} T^{-\alpha/2 - (l-2)}, & l=1, \\
+%         \frac{1}{\alpha/2+l-1} x^{-\alpha/2 - (l-2)} , & l=2,3,4.
+%       \end{cases}
+%     \end{aligned}
+%   \end{equation*}
+%   % \begin{equation}
+%   %   \begin{aligned}
+%   %     \left|\frac{d^{l}}{dx^{l}} I^{2-\alpha} u(x) \right|
+%   %     &\le \frac{\kappa_\alpha (\alpha-1)}{\Gamma(2-\alpha)} \Biggl(\cdots \Biggl)
+%   %   \end{aligned}
+%   % \end{equation}
+% \end{proof}
+
+
+
+
+\section{Numerical scheme}
+\subsection{Discretisation of $(-\Delta)^{\frac{\alpha}{2}}$ on Graded Mesh}
+\subsection{Discretisation of $D_t^{\gamma}$ on a General Mesh}
+
+Consider the temporal mesh $0 = t0 < t1 < t2 < · · · < t_M = T$ . Set $\tau_j := t_j - t_{j-1}$ for $j = 1, . . . , M$.
+\cite{Stynes:2019}
+
+On this mesh, we discretise $D_t^\gamma v$ for $v \in C[0, T ] \cap C^3(0, T ]$.
+\begin{equation}
+  \begin{aligned}
+    \delta_t^\gamma v(t_{k+\sigma}) &= \sum_{j=0}^{k} g_{k,j} \left( v(t_{j+1} - v(t_j)) \right) \\
+    &= g_{k,k} v(t_{k+1}) - \sum_{j=1}^{k} \left(g_{k,j} - g_{k,j-1}\right)  v(t_j) - g_{k,0} v(t_0)
+  \end{aligned}
+\end{equation}
+\begin{equation}
+  \delta_t^\gamma U^{k+1} = g_{k,k} U^{k+1} - \sum_{j=1}^{k}  \left( g_{k,j} - g_{k,j-1}  \right)U^j - g_{k,0} U^0
+\end{equation}
+
 Implicity scheme: Let $\tau = \frac{T}{M}$, $U^{n}, F^{n} \in \mathbb{R}^{2N-1}$,
 \begin{equation}
   \frac{U^{n+1} - U^{n} }{\tau} + AU^{n+1} = F^{n+1}.
@@ -71,9 +200,18 @@ Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
 \begin{equation}
   (I+\tau A)E^{n+1} = E^{n} + \tau R^{n+1}.
 \end{equation}
-We will prove the convergence of this scheme.
 
-\section{Property of $A$}
+\begin{equation}
+  \delta_t^\gamma U^{n+1} + AU^{n+1} = F^{n+1}
+\end{equation}
+\begin{equation}
+  \begin{aligned}
+    E^{n} &= (I+\tau A)^{-1}E^{n-1} + (I+\tau A)^{-1}\tau R^{n} \\
+    &= (I+\tau A)^{-n}E^{0} + \sum_{k=1}^{n} (I+\tau A)^{-k} \tau R^{n-k+1}
+  \end{aligned}
+\end{equation}
+
+\section{Property of $A$ and $g_{k,j}$}
 \begin{lemma}
   The stiffness matrix $A$ has the following properties:
   \begin{enumerate}
@@ -101,69 +239,6 @@ We will prove the convergence of this scheme.
 \textcolor{red}{We need to prove $\lambda_1 > c$ for some positive constant $c$.}
 
 
-\section{Regularity}
-\begin{lemma}
-  If
-  \begin{equation}
-    \left|\frac{\partial^{l} u}{\partial x^{l}}\right| \le \delta(x)^{\alpha/2-l}, \quad x \in \Omega,
-  \end{equation}
-  then
-  \begin{equation}
-    \left|-\frac{d^{l}}{dx^{l}} I^{2-\alpha} u \right| \le C \frac{\kappa_\alpha(\alpha-1)}{\Gamma(3-\alpha)} \delta(x)^{-\alpha/2 - (l-2)}, \quad l=1,2,3,4, \quad x \in \Omega,
-  \end{equation}
-  where $C$ is independent of $\alpha$.
-\end{lemma}
-\begin{proof}
-  \begin{equation}
-    \begin{aligned}
-      \frac{d^{l}}{dx^{l}} I^{2-\alpha} u &= \frac{\kappa_\alpha}{\Gamma(2-\alpha)} \Biggl(
-        (1-\alpha)\cdots(1-(l-1)-\alpha) \left(\int_0^{x/2} u(y) (x-y)^{1-l-\alpha} dy + (-1)^{l} \int_{T+x/2}^{2T} u(y) (y-x)^{1-l-\alpha} dy\right)  \\
-        &\quad + \sum_{k=1}^{l-1} (1-\alpha)\cdots(1-(k-1)-\alpha) \left(\frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(x/2) \left(\frac{x}{2}\right)^{1-k-\alpha} - (-1)^{k}\frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(T+x/2) \left(T+\frac{x}{2}\right)^{1-k-\alpha}   \right) \\
-        &\quad + (1-\alpha) \left(\int_{x/2}^{x} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (x-y)^{-\alpha} - \int_{x}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} \right)
-        \Biggl)
-    \end{aligned}
-  \end{equation}
-  Set $x\le T$, we have
-  \begin{equation*}
-    \left|\int_0^{x/2} u(y) (x-y)^{1-l-\alpha} dy\right| 
-    \le 2^{\alpha+l-1} \int_0^{x/2} y^{\alpha/2} x^{1-l-\alpha} dy
-    \simeq x^{-\alpha/2 - (l-2)}
-  \end{equation*}
-  \begin{equation*}
-    \frac{\partial ^{l-1-k}}{\partial x^{l-1-k}} u(x/2) \left(\frac{x}{2}\right)^{1-k-\alpha}
-    \lesssim  x^{-\alpha/2 - (l-2)}
-  \end{equation*}
-  \begin{equation*}
-    \begin{aligned}
-      &\int_{x/2}^{x} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (x-y)^{-\alpha} - \int_{x}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha}  \\
-      & \quad = \int_{0}^{x/2} \left(\frac{\partial ^{l-1}}{\partial x^{l-1}} u(x-z)- \frac{\partial ^{l-1}}{\partial x^{l-1}} u(x+z)\right) z^{-\alpha} dz       - \int_{x+x/2}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} dy
-    \end{aligned}
-  \end{equation*}
-  While
-  \begin{equation*}
-    \begin{aligned}
-      &\left|\int_{0}^{x/2} \left(\frac{\partial ^{l-1}}{\partial x^{l-1}} u(x-z)- \frac{\partial ^{l-1}}{\partial x^{l-1}} u(x+z)\right) z^{-\alpha} dz \right|  \\
-      &\quad =  2\int_{0}^{x/2} \frac{\partial ^{l}}{\partial x^{l}} u(\xi)  z^{1-\alpha}  dz 
-      \le \left(\frac{x}{2}\right)^{\alpha/2-l} 2\int_{0}^{x/2} z^{1-\alpha}  dz \simeq \frac{1}{2-\alpha} x^{-\alpha/2 - (l-2)}
-    \end{aligned}
-  \end{equation*}
-  \begin{equation*}
-    \begin{aligned}
-      &\int_{x+x/2}^{T+x/2} \frac{\partial ^{l-1}}{\partial x^{l-1}} u(y) (y-x)^{-\alpha} dy \\
-      &\quad \le \int_{x+x/2}^{T+x/2} y^{\alpha/2-(l-1)} y^{-\alpha} dy
-      \lesssim  \begin{cases}
-        \frac{1}{2-\alpha} T^{-\alpha/2 - (l-2)}, & l=1, \\
-        \frac{1}{\alpha/2+l-1} x^{-\alpha/2 - (l-2)} , & l=2,3,4.
-      \end{cases}
-    \end{aligned}
-  \end{equation*}
-  % \begin{equation}
-  %   \begin{aligned}
-  %     \left|\frac{d^{l}}{dx^{l}} I^{2-\alpha} u(x) \right|
-  %     &\le \frac{\kappa_\alpha (\alpha-1)}{\Gamma(2-\alpha)} \Biggl(\cdots \Biggl)
-  %   \end{aligned}
-  % \end{equation}
-\end{proof}
 
 \section{truncation error}
 
@@ -172,12 +247,7 @@ We will prove the convergence of this scheme.
 % We prove the shceme in convergence in the meaning of $L^2$ norm.
 % $\|v\|_{2,h} := v_i^T H v_i$ is bounded.
 
-\begin{equation}
-  \begin{aligned}
-    E^{n} &= (I+\tau A)^{-1}E^{n-1} + (I+\tau A)^{-1}\tau R^{n} \\
-    &= (I+\tau A)^{-n}E^{0} + \sum_{k=1}^{n} (I+\tau A)^{-k} \tau R^{n-k+1}
-  \end{aligned}
-\end{equation}
+
 Assume that $|R^{n}| \le C h^{\min\{r\alpha/2, 2\}}(x_i^{-\alpha} + (2T-x_i)^{-\alpha}) + C(r-1) h^2 (T - \delta(x_i) + h_N)^{1-\alpha} + C \tau^{?}$
 \begin{equation}
   \begin{aligned}
@@ -223,15 +293,7 @@ Since $A$ is diagonally dominant, $\|(I+\tau A)^{-1} E\|_\infty \le \|E\|_\infty
 
 \section{Caputo-Riesz}
 $\gamma\in (0,1)$
-\begin{equation}
-  D_t^\gamma u + (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
-\end{equation}
-where
-\begin{equation}
-  \begin{aligned}
-    D_t^\gamma u(x, t) = \frac{1}{\Gamma(1-\gamma)} \int_0^t \frac{\partial u(x, s)}{\partial s} (t-s)^{-\gamma} ds
-  \end{aligned}
-\end{equation}
+
 \begin{equation}
   \begin{aligned}
     D_N^\gamma u(x, t_n) 
@@ -267,7 +329,7 @@ Define the matrices $\Theta_{n,j}$, for $n = 1, 2 . . . , N$ and $j = 0, 1, 2, .
     % \Theta_{n,0} = d_{n,1} (d_{n,n} + A)^{-1} + \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k})(d_{n,n} + A)^{-1} \Theta_{k,0}
   \end{gathered}
 \end{equation}
-Observe that $\Theta_{n,j} > 0$ for all $n, j$.
+Observe that $\Theta_{n,j} > O$ for all $n, j$.
 
 \begin{lemma}
   \begin{equation}
@@ -280,14 +342,14 @@ Observe that $\Theta_{n,j} > 0$ for all $n, j$.
 \begin{lemma}
   Let the parameter $\beta$ satisfy $\beta\le r_t \gamma$. Then for $n=1,2,..., N$, one has
   \begin{equation} \label{eq:sum_Theta}
-    \sum_{j=1}^n \Theta_{n,j} \le A^{-1}
+    \sum_{j=1}^n \Theta_{n,j} < A^{-1}
     % \sum_{j=1}^n j^{-\beta} \Theta_{n,j} \le A^{-1}
   \end{equation}
 \end{lemma}
 \begin{proof}
   Use induction on $n$. When $n=1$, then
   $
-    \sum_{j=1}^1  \Theta_{1,j} = \Theta_{1,1}
+    \sum_{j=1}^1  \Theta_{1,j} = \Theta_{1,1} < A^{-1}
   $.
   Next, assume that \eqref{eq:sum_Theta} holds for $k=1, 2,..., m-1(2\le m \le N)$. 
   We want to prove \eqref{eq:sum_Theta} for $n=m$.
@@ -299,7 +361,7 @@ Observe that $\Theta_{n,j} > 0$ for all $n, j$.
       &= \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}  \sum_{j=1}^{k} \Theta_{k,j} \\
       & \le  \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}   A^{-1} \\
       &= \Theta_{m,m} + (d_{m, m} - d_{m,1})\Theta_{m,m}   A^{-1} \\
-      &= A^{-1} - d_{m,1} \Theta_{m,m}   A^{-1} \le A^{-1}
+      &= A^{-1} - d_{m,1} \Theta_{m,m}   A^{-1} < A^{-1}
     \end{aligned}
   \end{equation*}
 \end{proof}
