@@ -40,29 +40,26 @@
 
 % REQUIRED
 \begin{abstract}
-This is an example SIAM \LaTeX\ article. This can be used as a
-template for new articles.  Abstracts must be able to stand alone
-and so cannot contain citations to the paper's references,
-equations, etc.  An abstract must consist of a single paragraph and
-be concise. Because of online formatting, abstracts must appear as
-plain as possible. Any equations should be inline.
+  This is an example SIAM \LaTeX\ article. This can be used as a
+  template for new articles.  Abstracts must be able to stand alone
+  and so cannot contain citations to the paper's references,
+  equations, etc.  An abstract must consist of a single paragraph and
+  be concise. Because of online formatting, abstracts must appear as
+  plain as possible. Any equations should be inline.
 \end{abstract}
 
 % REQUIRED
 \begin{keywords}
-example, \LaTeX
+  example, \LaTeX
 \end{keywords}
 
 % REQUIRED
 \begin{MSCcodes}
-68Q25, 68R10, 68U05
+  68Q25, 68R10, 68U05
 \end{MSCcodes}
 
 \section{Introduction}
-We study
-\begin{equation}
-  \frac{\partial u}{\partial t} +  (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
-\end{equation}
+We study $\gamma\in (0,1)$, $\alpha\in (1,2)$ and $\Omega=(0,2L)$.
 \begin{equation}
   D_t^\gamma u + (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
 \end{equation}
@@ -78,6 +75,9 @@ where
   \end{aligned}
 \end{equation}
 where $\gamma \in (0,1)$, $\alpha \in (1,2)$.
+
+
+
 
 
 % We will prove the convergence of this scheme.
@@ -176,42 +176,34 @@ for all $(x,t) \in (0, 2L)\times (0,T]$.
 
 \section{Numerical scheme}
 \subsection{Discretisation of $(-\Delta)^{\frac{\alpha}{2}}$ on Graded Mesh}
-\subsection{Discretisation of $D_t^{\gamma}$ on a General Mesh}
-
-Consider the temporal mesh $0 = t0 < t1 < t2 < · · · < t_M = T$ . Set $\tau_j := t_j - t_{j-1}$ for $j = 1, . . . , M$.
-\cite{Stynes:2019}
-
-On this mesh, we discretise $D_t^\gamma v$ for $v \in C[0, T ] \cap C^3(0, T ]$.
+We discretize the $(-\Delta)^{\alpha/2}$ on a graded mesh.
 \begin{equation}
-  \begin{aligned}
-    \delta_t^\gamma v(t_{k+\sigma}) &= \sum_{j=0}^{k} g_{k,j} \left( v(t_{j+1} - v(t_j)) \right) \\
-    &= g_{k,k} v(t_{k+1}) - \sum_{j=1}^{k} \left(g_{k,j} - g_{k,j-1}\right)  v(t_j) - g_{k,0} v(t_0)
-  \end{aligned}
+  -D_M^{\alpha}u(x_m, t_n) = -D_M^2 I^{2-\alpha} \Pi_M u (x_m, t_n)
+\end{equation}
+The discrete operator can be written in matrix form
+\begin{equation} \label{eq:equation_matrix}
+  A\hat{U}^n
 \end{equation}
 \begin{equation}
-  \delta_t^\gamma U^{k+1} = g_{k,k} U^{k+1} - \sum_{j=1}^{k}  \left( g_{k,j} - g_{k,j-1}  \right)U^j - g_{k,0} U^0
+  A = H^{-1} D
 \end{equation}
-
-Implicity scheme: Let $\tau = \frac{T}{M}$, $U^{n}, F^{n} \in \mathbb{R}^{2N-1}$,
+where
 \begin{equation}
-  \frac{U^{n+1} - U^{n} }{\tau} + AU^{n+1} = F^{n+1}.
+  H = \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right),
 \end{equation}
-Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
+and 
 \begin{equation}
-  (I+\tau A)E^{n+1} = E^{n} + \tau R^{n+1}.
+  D_{ij} = \frac{\kappa_\alpha}{\Gamma(4-\alpha)} C_i K_{ij} C_j^T
 \end{equation}
-
-\begin{equation}
-  \delta_t^\gamma U^{n+1} + AU^{n+1} = F^{n+1}
-\end{equation}
-\begin{equation}
-  \begin{aligned}
-    E^{n} &= (I+\tau A)^{-1}E^{n-1} + (I+\tau A)^{-1}\tau R^{n} \\
-    &= (I+\tau A)^{-n}E^{0} + \sum_{k=1}^{n} (I+\tau A)^{-k} \tau R^{n-k+1}
-  \end{aligned}
-\end{equation}
-
-\section{Property of $A$ and $g_{k,j}$}
+$C_j := \left( \frac{1}{h_j}, -\frac{1}{h_j}-\frac{1}{h_{j+1}}, \frac{1}{h_{j+1}} \right)$
+and
+\begin{equation*}
+    K_{ij} := \begin{pmatrix}
+        |x_{i-1} - x_{j-1}|^{3-\alpha} & |x_{i-1} - x_{j}|^{3-\alpha} &|x_{i-1} - x_{j+1}|^{3-\alpha} \\
+        |x_{i} - x_{j-1}|^{3-\alpha} & |x_{i} - x_{j}|^{3-\alpha} &|x_{i} - x_{j+1}|^{3-\alpha} \\
+        |x_{i+1} - x_{j-1}|^{3-\alpha} & |x_{i+1} - x_{j}|^{3-\alpha} &|x_{i+1} - x_{j+1}|^{3-\alpha}
+    \end{pmatrix} .
+\end{equation*}
 \begin{lemma}
   The stiffness matrix $A$ has the following properties:
   \begin{enumerate}
@@ -236,11 +228,74 @@ Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
   The eigenvectors of $A$ form an orthogonal basis of the Hilbert space defined by $\langle u,v \rangle := uHv$. 
   Let $v_i = H^{-1/2} u_i$ be an eigenvector of $A$ with eigenvalue $\lambda_i$.
 \end{proof}
-\textcolor{red}{We need to prove $\lambda_1 > c$ for some positive constant $c$.}
 
+\subsection{Discretisation of $D_t^{\gamma}$ on a General Mesh}
+
+Consider the temporal mesh $0 = t_0 < t_1 < t_2 < · · · < t_M = T$ . Set $\tau_j := t_j - t_{j-1}$ for $j = 1, . . . , M$.
+
+On this mesh, we discretise $D_t^\gamma v$ for $v \in C[0, T ] \cap C^3(0, T ]$.
+\begin{equation}
+  \begin{aligned}
+    D_N^\gamma u(x, t_n) 
+    &= \sum_{k=1}^{n} \frac{1}{\Gamma(2-\gamma)}  \left( u(x,t_k) -  u(x,t_{k-1})\right) \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_k)^{1-\gamma}}{\tau_k} \\
+    &= d_{n,n} u(x, t_n) - \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k}) u(x, t_{k}) - d_{n,1} u(x, t_0),
+  \end{aligned}
+\end{equation}
+where
+\begin{equation}
+  d_{n,k} = \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_{k})^{1-\gamma}}{\Gamma(2-\gamma)\tau_{k}} \quad \text{for} \quad 1\le k \le n \quad \text{and} \quad d_{n,0} = 0,
+  % \simeq (1-\gamma)(t_n-t_{k-1})^{-\gamma},
+\end{equation}
+$\quad d_{n,n} = \frac{\tau_n^{-\gamma}}{\Gamma(2-\gamma)}, \quad d_{n,k+1} \ge d_{n,k}$.
+
+% \begin{equation}
+%   \begin{aligned}
+%     \delta_t^\gamma v(t_{k+\sigma}) &= \sum_{j=0}^{k} g_{k,j} \left( v(t_{j+1} - v(t_j)) \right) \\
+%     &= g_{k,k} v(t_{k+1}) - \sum_{j=1}^{k} \left(g_{k,j} - g_{k,j-1}\right)  v(t_j) - g_{k,0} v(t_0)
+%   \end{aligned}
+% \end{equation}
+% \begin{equation}
+%   \delta_t^\gamma U^{k+1} = g_{k,k} U^{k+1} - \sum_{j=1}^{k}  \left( g_{k,j} - g_{k,j-1}  \right)U^j - g_{k,0} U^0
+% \end{equation}
+
+
+% \begin{equation}
+%   \delta_t^\gamma U^{n+1} + AU^{n+1} = F^{n+1}
+% \end{equation}
+
+
+
+
+% \textcolor{red}{We need to prove $\lambda_1 > c$ for some positive constant $c$.}
+
+
+
+The final scheme is
+\begin{equation}
+  D_N^\gamma U^n + A U^{n} = F^{n}
+\end{equation}
 
 
 \section{truncation error}
+
+\begin{theorem} \cite{Stynes:2017}
+  \begin{equation}
+    \left|R_t^n\right| := \left| D_N^\gamma u(x_m, t_n) - D_t^\gamma u(x_m, t_n) \right| \le C n^{\min\{2-\gamma, r_t\gamma\}}.
+  \end{equation}
+\end{theorem}
+\begin{theorem}
+  \begin{equation}
+    \begin{aligned}
+      \left|R_x^n\right| &:= \left| -D_M^{\alpha} u(x_m, t_n) - (-\Delta)^{\alpha/2} u(x_m, t_n) \right| \\
+      &\le C M^{-\min\{r\frac{\alpha}{2}, 2\}}(x_i^{-\alpha} + (2L-x_i)^{-\alpha}) + C(r-1) M^{-2} (L - \delta(x_i) + 1/M)^{1-\alpha} \\
+      & =: R_x .
+    \end{aligned}
+  \end{equation}
+\end{theorem}
+\begin{proof}
+  Replace the requrements of $f$ by $(-\Delta)^{\alpha/2}u$.
+\end{proof}
+
 
 
 \section{Convergence}
@@ -248,7 +303,122 @@ Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
 % $\|v\|_{2,h} := v_i^T H v_i$ is bounded.
 
 
-Assume that $|R^{n}| \le C h^{\min\{r\alpha/2, 2\}}(x_i^{-\alpha} + (2T-x_i)^{-\alpha}) + C(r-1) h^2 (T - \delta(x_i) + h_N)^{1-\alpha} + C \tau^{?}$
+% Assume that $|R^{n}| \le C h^{\min\{r\alpha/2, 2\}}(x_i^{-\alpha} + (2T-x_i)^{-\alpha}) + C(r-1) h^2 (T - \delta(x_i) + h_N)^{1-\alpha} + C \tau^{?}$
+
+
+
+
+Numerical scheme:
+\begin{equation}
+  D_N^\gamma U^n + A U^{n} = F^{n}
+\end{equation}
+We have
+\begin{equation}
+  \begin{aligned}
+    \left(d_{n,n} I + A \right) E^n = \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k}) E^{k} + d_{n,1} E^0 + R^{n}
+  \end{aligned}
+\end{equation}
+
+
+
+Define the matrices $\Theta_{n,j}$, for $n = 1, 2 . . . , N$ and $j = 0, 1, 2, . . . , n - 1$ by
+\begin{equation} \label{eq:def_Theta}
+  \begin{gathered}
+    \Theta_{n,n} = (d_{n,n} + A)^{-1} , \quad \Theta_{0,0} = I, \quad
+    \Theta_{n,j} = \sum_{k=j}^{n-1} (d_{n, k+1} - d_{n,k})\Theta_{n,n} \Theta_{k,j}. %\quad 1\le j <n 
+    % \Theta_{n,0} = d_{n,1} (d_{n,n} + A)^{-1} + \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k})(d_{n,n} + A)^{-1} \Theta_{k,0}
+  \end{gathered}
+\end{equation}
+Observe that $\Theta_{n,j} > O$ for all $n, j$.
+
+\begin{lemma}
+  \begin{equation}
+    \begin{aligned}
+      E^n &= \sum_{j=1}^{n} \Theta_{n,j} R^{j} + \Theta_{n,0} E^{0} \\
+      &= \sum_{j=1}^{n} \Theta_{n,j} R_t^{j} + \sum_{j=1}^{n} \Theta_{n,j} R_x^{j} + \Theta_{n,0} E^{0}
+    \end{aligned}
+  \end{equation}
+\end{lemma}
+
+\begin{theorem}
+  \begin{equation}
+    \left|\sum_{j=1}^{n} \Theta_{n,j} R_t^{j}\right| \le C T^{\gamma} N^{-\min\{2-\gamma, r_t\gamma\}}.
+  \end{equation}
+\end{theorem}
+
+
+
+
+\begin{lemma}
+  Let the parameter $\beta$ satisfy $\beta\le r_t \gamma$. Then for $n=1,2,..., N$, one has
+  \begin{equation} \label{eq:sum_Theta}
+    \sum_{j=1}^n \Theta_{n,j} < A^{-1}
+    % \sum_{j=1}^n j^{-\beta} \Theta_{n,j} \le A^{-1}
+  \end{equation}
+\end{lemma}
+\begin{proof}
+  Use induction on $n$. When $n=1$, then
+  $
+    \sum_{j=1}^1  \Theta_{1,j} = \Theta_{1,1} < A^{-1}
+  $.
+  Next, assume that \eqref{eq:sum_Theta} holds for $k=1, 2,..., m-1(2\le m \le N)$. 
+  We want to prove \eqref{eq:sum_Theta} for $n=m$.
+  Invoking \eqref{eq:def_Theta} and interchanging the order of summation,
+  \begin{equation*}
+    \begin{aligned}
+      \sum_{j=1}^m  \Theta_{m,j}
+      &=  \Theta_{m,m} + \sum_{j=1}^{m-1}  \sum_{k=j}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m} \Theta_{k,j} \\
+      &= \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}  \sum_{j=1}^{k} \Theta_{k,j} \\
+      & \le  \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}   A^{-1} \\
+      &= \Theta_{m,m} + (d_{m, m} - d_{m,1})\Theta_{m,m}   A^{-1} \\
+      &= A^{-1} - d_{m,1} \Theta_{m,m}   A^{-1} < A^{-1}
+    \end{aligned}
+  \end{equation*}
+\end{proof}
+
+\begin{theorem}
+  \begin{equation}
+    \begin{aligned}
+      \left| \sum_{j=1}^{n} \Theta_{n,j} R_x^{j} \right| \le C M^{-\min\{r_x\alpha/2, 2\}}
+    \end{aligned}
+  \end{equation}
+\end{theorem}
+\begin{proof}
+  \begin{equation}
+    \begin{aligned}
+      \left| \sum_{j=1}^{n} \Theta_{n,j} R_x^{j} \right| 
+      &\le A^{-1} R_x
+    \end{aligned}
+  \end{equation}
+\end{proof}
+
+\begin{theorem}
+  \begin{equation}
+    |E_N| \le C \left( N^{-\min\{2-\gamma, r_t\gamma\}} + M^{-\min\{r_x\frac{\alpha}{2}, 2\}} \right)
+  \end{equation}
+\end{theorem}
+
+
+
+
+\section*{One-order}
+\begin{equation}
+  \frac{\partial u}{\partial t} +  (-\Delta)^{\frac{\alpha}{2}} u = f(x,t), \quad x \in \Omega, t\in (0,T].
+\end{equation}
+scheme: Let $\tau = \frac{T}{M}$, $U^{n}, F^{n} \in \mathbb{R}^{2N-1}$,
+\begin{equation}
+  \frac{U^{n+1} - U^{n} }{\tau} + AU^{n+1} = F^{n+1}.
+\end{equation}
+Then $E^{n} = U^{n} - \hat{U}^n \in \mathbb{R}^{2N-1}$,
+\begin{equation}
+  (I+\tau A)E^{n+1} = E^{n} + \tau R^{n+1}.
+\end{equation}
+\begin{equation}
+  \begin{aligned}
+    E^{n} &= (I+\tau A)^{-1}E^{n-1} + (I+\tau A)^{-1}\tau R^{n} \\
+    &= (I+\tau A)^{-n}E^{0} + \sum_{k=1}^{n} (I+\tau A)^{-k} \tau R^{n-k+1}
+  \end{aligned}
+\end{equation}
 \begin{equation}
   \begin{aligned}
     (I+\tau A)^{-k} \tau R^{n-k+1} &= (\tau A) (I+\tau A)^{-k} (\tau A)^{-1} \tau R^{n-k+1} \\
@@ -281,7 +451,7 @@ Then
 \end{equation}
 Since $A$ is diagonally dominant, $\|(I+\tau A)^{-1} E\|_\infty \le \|E\|_\infty$, we have
 \begin{equation}
-  \|E^{n}\|_\infty \le \|E_{0}\|_\infty + 2 \|A^{-1} R\|_\infty.
+  \|E^{n}\|_\infty \le \|E_{0}\|_\infty +  \|A^{-1} R\|_\infty.
 \end{equation}
 
 \textcolor{red}{
@@ -289,85 +459,6 @@ Since $A$ is diagonally dominant, $\|(I+\tau A)^{-1} E\|_\infty \le \|E\|_\infty
   $A^{-1} R$ is bounded by $C \left(h^{\min\{r\alpha/2, 2\}} + \tau^{?}\right)$, where $C$ is a constant independent of $h, \alpha$.
 \end{lemma}
 }
-
-
-\section{Caputo-Riesz}
-$\gamma\in (0,1)$
-
-\begin{equation}
-  \begin{aligned}
-    D_N^\gamma u(x, t_n) 
-    &= \sum_{k=1}^{n} \frac{1}{\Gamma(2-\gamma)}  \left( u(x,t_k) -  u(x,t_{k-1})\right) \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_k)^{1-\gamma}}{\tau_k} \\
-    &= d_{n,n} u(x, t_n) - \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k}) u(x, t_{k}) - d_{n,1} u(x, t_0),
-  \end{aligned}
-\end{equation}
-where
-\begin{equation}
-  d_{n,k} = \frac{(t_n-t_{k-1})^{1-\gamma} - (t_n-t_{k})^{1-\gamma}}{\Gamma(2-\gamma)\tau_{k}} \quad \text{for} \quad 1\le k \le n \quad \text{and} \quad d_{n,0} = 0,
-  % \simeq (1-\gamma)(t_n-t_{k-1})^{-\gamma},
-\end{equation}
-$\quad d_{n,n} = \frac{\tau_n^{-\gamma}}{\Gamma(2-\gamma)}, \quad d_{n,k+1} \ge d_{n,k}$.
-
-Numerical scheme:
-\begin{equation}
-  D_N^\gamma U^n + A U^{n} = F^{n}
-\end{equation}
-We have
-\begin{equation}
-  \begin{aligned}
-    \left(d_{n,n} I + A \right) E^n = \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k}) E^{k} + d_{n,1} E^0 + R^{n}
-  \end{aligned}
-\end{equation}
-
-
-
-Define the matrices $\Theta_{n,j}$, for $n = 1, 2 . . . , N$ and $j = 0, 1, 2, . . . , n - 1$ by
-\begin{equation} \label{eq:def_Theta}
-  \begin{gathered}
-    \Theta_{n,n} = (d_{n,n} + A)^{-1} , \quad \Theta_{0,0} = I, \quad
-    \Theta_{n,j} = \sum_{k=j}^{n-1} (d_{n, k+1} - d_{n,k})\Theta_{n,n} \Theta_{k,j}. %\quad 1\le j <n 
-    % \Theta_{n,0} = d_{n,1} (d_{n,n} + A)^{-1} + \sum_{k=1}^{n-1} (d_{n, k+1} - d_{n,k})(d_{n,n} + A)^{-1} \Theta_{k,0}
-  \end{gathered}
-\end{equation}
-Observe that $\Theta_{n,j} > O$ for all $n, j$.
-
-\begin{lemma}
-  \begin{equation}
-    \begin{aligned}
-      E^n = \sum_{j=1}^{n} \Theta_{n,j} R^{j} + \Theta_{n,0} E^{0}
-    \end{aligned}
-  \end{equation}
-\end{lemma}
-
-\begin{lemma}
-  Let the parameter $\beta$ satisfy $\beta\le r_t \gamma$. Then for $n=1,2,..., N$, one has
-  \begin{equation} \label{eq:sum_Theta}
-    \sum_{j=1}^n \Theta_{n,j} < A^{-1}
-    % \sum_{j=1}^n j^{-\beta} \Theta_{n,j} \le A^{-1}
-  \end{equation}
-\end{lemma}
-\begin{proof}
-  Use induction on $n$. When $n=1$, then
-  $
-    \sum_{j=1}^1  \Theta_{1,j} = \Theta_{1,1} < A^{-1}
-  $.
-  Next, assume that \eqref{eq:sum_Theta} holds for $k=1, 2,..., m-1(2\le m \le N)$. 
-  We want to prove \eqref{eq:sum_Theta} for $n=m$.
-  Invoking \eqref{eq:def_Theta} and interchanging the order of summation,
-  \begin{equation*}
-    \begin{aligned}
-      \sum_{j=1}^m  \Theta_{m,j}
-      &=  \Theta_{m,m} + \sum_{j=1}^{m-1}  \sum_{k=j}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m} \Theta_{k,j} \\
-      &= \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}  \sum_{j=1}^{k} \Theta_{k,j} \\
-      & \le  \Theta_{m,m} + \sum_{k=1}^{m-1} (d_{m, k+1} - d_{m,k})\Theta_{m,m}   A^{-1} \\
-      &= \Theta_{m,m} + (d_{m, m} - d_{m,1})\Theta_{m,m}   A^{-1} \\
-      &= A^{-1} - d_{m,1} \Theta_{m,m}   A^{-1} < A^{-1}
-    \end{aligned}
-  \end{equation*}
-\end{proof}
-
-
-
 
 
 
