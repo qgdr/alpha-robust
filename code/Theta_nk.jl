@@ -42,13 +42,13 @@ end
 Ω = (0, 1)
 
 
-α = 2-1//100000   #1+ 9 // 10
+α = 2-1//10   #1+ 9 // 10
 α = Float(α)
 
 @show 1 < α < 2
 
 r = 4/α
-N = 200
+N = 50
 
 
 # function num_err(Ω, r, α, N)
@@ -86,18 +86,18 @@ end
 println("A is OK")
 
 
-function te_f1(x, α)
-    return x^(-α) + (1 - x)^(-α)
-end
 
-function te_f2(x, α)
-    return (abs(1//2-x)+ 1//N)^(1-α)
-end
+# T = 1
+# n = 10
+# τ = T // n
+# t = OffsetArray(0:τ:T, 0:n)
 
-xi = x[1:2N-1]
-TE = te_f1.(xi, α) #.+ te_f2.(xi, α)
-# TE = te_f2.(xi, α) #.+ te_f2.(xi, α)
+# d(m,k) = ()
 
-Som = A \ TE
+# Θ = []
+# for m = 1:n
+    
+#     Θ_mm = 
+# end
 
-plot(xi, Som, legend=false)
+

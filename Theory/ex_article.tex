@@ -88,16 +88,16 @@ satisfies
   \begin{equation} \label{subeq:regularity-on-x}
     \left|\frac{\partial^{l} u}{\partial t^l}(x,t)\right| \le C(1+t^{\gamma-l}) \quad for \quad l = 0,1,2,
   \end{equation}
-  \begin{equation} \label{subeq:regularity-of-Au-on-x}
-    \left|\frac{\partial^{l} }{\partial x^l} (-\Delta)^{\alpha/2} u(x,t) \right| \le C \delta(x)^{-\alpha/2-l} \quad for \quad l = 0,1,2,
-  \end{equation}
   \begin{equation} \label{subeq:regularity-on-t}
     \left|\frac{\partial^{l} u}{\partial x^l}(x,t)\right| \le C\delta(x)^{\alpha/2-l} \quad for \quad l = 0,1,2,3,4,
+  \end{equation}
+  \begin{equation} \label{subeq:regularity-of-Au-on-x}
+    \left|\frac{\partial^{l} }{\partial x^l} (-\Delta)^{\alpha/2} u(x,t) \right| \le C \delta(x)^{-\alpha/2-l} \quad for \quad l = 0,1,2,
   \end{equation}
 \end{subequations}
 for all $(x,t) \in (0, 2L)\times (0,T]$.
 \begin{remark}
-  \eqref{subeq:regularity-of-Au-on-x} can be derived from \eqref{subeq:regularity-on-x} by
+  \eqref{subeq:regularity-of-Au-on-x} can be derived from \eqref{subeq:regularity-of-Au-on-x} by
   \begin{equation*}
     \begin{aligned}
       I^{2-\alpha} u(x,t) &= \int_{0}^{x/2} + \int_{L+x/2}^{2L} u(y,t) \frac{|x-y|^{1-\alpha}}{\Gamma(2-\alpha)} dy \\
@@ -181,18 +181,18 @@ We discretize the $(-\Delta)^{\alpha/2}$ on a graded mesh.
   -D_M^{\alpha}u(x_m, t_n) = -D_M^2 I^{2-\alpha} \Pi_M u (x_m, t_n)
 \end{equation}
 The discrete operator can be written in matrix form
-\begin{equation} \label{eq:equation_matrix}
-  A\hat{U}^n
-\end{equation}
+% \begin{equation} \label{eq:equation_matrix}
+%   A\hat{U}^n
+% \end{equation}
 \begin{equation}
-  A = H^{-1} D
-\end{equation}
-where
-\begin{equation}
-  H = \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right),
-\end{equation}
-and 
-\begin{equation}
+  A = H^{-1} D, \quad \text{with} \quad
+% \end{equation}
+% where
+% \begin{equation}
+  H = \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right)
+% \end{equation}
+~ and ~ 
+% \begin{equation}
   D_{ij} = \frac{\kappa_\alpha}{\Gamma(4-\alpha)} C_i K_{ij} C_j^T
 \end{equation}
 $C_j := \left( \frac{1}{h_j}, -\frac{1}{h_j}-\frac{1}{h_{j+1}}, \frac{1}{h_{j+1}} \right)$
@@ -211,7 +211,7 @@ and
     \item $A$ is positive definite, which means that the eigenvalues of $\frac{A+A^T}{2}$ are positive.
     \item The eigenvectors of $A$ are orthogonal in space where $\langle u,v \rangle := uHv$, 
     where $H := \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right)$.
-    \item $(I+\tau A)^{-1} > O$ for any $\tau > 0$.
+    \item $(I+\tau A)^{-1} > O$ for any $\tau > 0$, and $A^{-1}>O$.
   \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -278,19 +278,23 @@ The final scheme is
 
 \section{truncation error}
 
-\begin{theorem} \cite{Stynes:2017}
-  \begin{equation}
+\begin{theorem} 
+  \cite{Stynes:2017}
+  \label{thm:LTE_t}
+  \begin{equation*}
     \left|R_t^n\right| := \left| D_N^\gamma u(x_m, t_n) - D_t^\gamma u(x_m, t_n) \right| \le C n^{\min\{2-\gamma, r_t\gamma\}}.
-  \end{equation}
+  \end{equation*}
 \end{theorem}
+
 \begin{theorem}
-  \begin{equation}
+  \label{thm:LTE_x}
+  \begin{equation*}
     \begin{aligned}
       \left|R_x^n\right| &:= \left| -D_M^{\alpha} u(x_m, t_n) - (-\Delta)^{\alpha/2} u(x_m, t_n) \right| \\
-      &\le C M^{-\min\{r\frac{\alpha}{2}, 2\}}(x_i^{-\alpha} + (2L-x_i)^{-\alpha}) + C(r-1) M^{-2} (L - \delta(x_i) + 1/M)^{1-\alpha} \\
+      &\le C M^{-\min\{r_x \frac{\alpha}{2}, 2\}}(x_i^{-\alpha} + (2L-x_i)^{-\alpha}) + C(r-1) M^{-2} (L - \delta(x_i) + 1/M)^{1-\alpha} \\
       & =: R_x .
     \end{aligned}
-  \end{equation}
+  \end{equation*}
 \end{theorem}
 \begin{proof}
   Replace the requrements of $f$ by $(-\Delta)^{\alpha/2}u$.
@@ -340,17 +344,63 @@ Observe that $\Theta_{n,j} > O$ for all $n, j$.
   \end{equation}
 \end{lemma}
 
-\begin{theorem}
+Our stability result will be presented in a general framework. Assume that
+\begin{equation} \label{eq:discrete_problem}
+  \mathcal{L}_{M,N} v_m^n = g_m^n \quad \text{for} \quad 1\le m\le 2M-1, \quad 1\le n \le N,
+\end{equation}
+with $v_0^n = v_{2M}^n = 0$ for $0\le n\le N$ and $v_m^0$ given for $0\le m\le 2M$.
+
+Here the discrete operator is $\mathcal{L}_{M,N} v_m^n = D_N^\gamma v_m^n - D_M^\alpha v_m^n$.
+
+\begin{lemma} \label{lmm:stability}
+  The solution of the discrete problem \eqref{eq:discrete_problem} satisﬁes
+  \begin{equation*}
+    \|v^n\|_\infty \le d_{n,n}^{-1} \left[ \|g^n\|_\infty + d_{n,1}\|v^0\|_\infty + \sum_{k=1}^{n-1} \left(d_{n, k+1} - d_{n,k}\right) \|v^{k}\|_\infty \right]
+  \end{equation*}
+  for $n=1,2,..., N$.
+\end{lemma}
+\begin{proof}
+  Fix $n\in \{1,2,..., N\}$. Choose $i_0$ such that $|v^n_{i_0}| = \|v^n\|_\infty$. Then, it yields
+  \begin{equation*}
+    d_{n,n} v_{i_0} + \sum_{j=1}^{2M-1} a_{i_0, j} v^n_{j} = g^n_{i_0} + \sum_{k=1}^{n-1} \left(d_{n, k+1} - d_{n,k}\right) v^k_{i_0} + d_{n,1} v^0_{i_0}.
+  \end{equation*}
+  Hence, by $a_{i_0, i_0} > 0$ and the choice of $i_0$, one obtains
+  \begin{equation*}
+    \begin{aligned}
+      \left(d_{n,n} + a_{i_0, i_0} \right) |v^n_{i_0}|
+      &\le \sum_{j\neq i_0} |a_{i_0, j} | |v^n_j| + |g^n_{i_0}| + \sum_{k=1}^{n-1} \left(d_{n, k+1} - d_{n,k}\right) |v^k_{i_0}| + d_{n,1} |v^0_{i_0}|.
+    \end{aligned}
+  \end{equation*}
+  Since $A$ is strcitly diagonally dominant, we can get
+  \begin{equation*}
+    d_{n,n} \|v^n\|_\infty \le \|g\|_\infty + d_{n,1}\|v^0\|_\infty + \sum_{k=1}^{n-1} \left(d_{n, k+1} - d_{n,k}\right) \|v^{k}\|_\infty.
+  \end{equation*}
+  The proof is completed.
+\end{proof}
+
+
+
+\begin{theorem} \label{thm:convergence-t}
   \begin{equation}
     \left|\sum_{j=1}^{n} \Theta_{n,j} R_t^{j}\right| \le C T^{\gamma} N^{-\min\{2-\gamma, r_t\gamma\}}.
   \end{equation}
 \end{theorem}
+\begin{proof}
+  Let $v^n = \sum_{j=1}^{n} \Theta_{n,j} R_t^{j}$. Then, we can check that $v_n$ satisfies \eqref{eq:discrete_problem}
+  \begin{equation*}
+    \mathcal{L}_{M,N} \; v^n = R_t^{n}.
+  \end{equation*}
+  According to \Cref{thm:LTE_t,lmm:stability} and the proof of \cite[Theorem 5.3]{Stynes:2017}, one has 
+  \begin{equation*}
+    \|v^n\|_\infty \le C^\gamma N^{-\min\{2-\gamma, r_t\gamma\}}.
+  \end{equation*}
+\end{proof}
 
 
 
 
 \begin{lemma}
-  Let the parameter $\beta$ satisfy $\beta\le r_t \gamma$. Then for $n=1,2,..., N$, one has
+  For $n=1,2,..., N$, one has
   \begin{equation} \label{eq:sum_Theta}
     \sum_{j=1}^n \Theta_{n,j} < A^{-1}
     % \sum_{j=1}^n j^{-\beta} \Theta_{n,j} \le A^{-1}
@@ -374,9 +424,10 @@ Observe that $\Theta_{n,j} > O$ for all $n, j$.
       &= A^{-1} - d_{m,1} \Theta_{m,m}   A^{-1} < A^{-1}
     \end{aligned}
   \end{equation*}
+  The proof is completed.
 \end{proof}
 
-\begin{theorem}
+\begin{theorem} \label{thm:convergence-x}
   \begin{equation}
     \begin{aligned}
       \left| \sum_{j=1}^{n} \Theta_{n,j} R_x^{j} \right| \le C M^{-\min\{r_x\alpha/2, 2\}}
@@ -384,12 +435,16 @@ Observe that $\Theta_{n,j} > O$ for all $n, j$.
   \end{equation}
 \end{theorem}
 \begin{proof}
+  Since $\Theta_{n,j} > O$, we have
   \begin{equation}
     \begin{aligned}
       \left| \sum_{j=1}^{n} \Theta_{n,j} R_x^{j} \right| 
-      &\le A^{-1} R_x
+      &\le \sum_{j=1}^{n} \Theta_{n,j} |R_x^{j}|
+      \le \sum_{j=1}^{n} \Theta_{n,j} |R_x|
+      < A^{-1} R_x
     \end{aligned}
   \end{equation}
+  Since $A^{-1} R_x$ is bounded by $C M^{-\min\{r_x\alpha/2, 2\}}$, the proof is completed.
 \end{proof}
 
 \begin{theorem}
@@ -397,6 +452,9 @@ Observe that $\Theta_{n,j} > O$ for all $n, j$.
     |E_N| \le C \left( N^{-\min\{2-\gamma, r_t\gamma\}} + M^{-\min\{r_x\frac{\alpha}{2}, 2\}} \right)
   \end{equation}
 \end{theorem}
+\begin{proof}
+  According to \Cref{thm:convergence-t,thm:convergence-x}, the desired result is obtained.
+\end{proof}
 
 
 
