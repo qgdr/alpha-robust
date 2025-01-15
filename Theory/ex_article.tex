@@ -83,12 +83,12 @@ where $\gamma \in (0,1)$, $\alpha \in (1,2)$.
 % We will prove the convergence of this scheme.
 \section{Regularity of the solution}
 For the space-time fractional diffusion equation, it was first assumed that the solution regularity
-satisfies
+satisfies \cite{ROSOTON2014275,Stynes:2017,Xavier:2016,Harnack:2017}
 \begin{subequations} \label{eq:regularity}
-  \begin{equation} \label{subeq:regularity-on-x}
+  \begin{equation} \label{subeq:regularity-on-t}
     \left|\frac{\partial^{l} u}{\partial t^l}(x,t)\right| \le C(1+t^{\gamma-l}) \quad for \quad l = 0,1,2,
   \end{equation}
-  \begin{equation} \label{subeq:regularity-on-t}
+  \begin{equation} \label{subeq:regularity-on-x}
     \left|\frac{\partial^{l} u}{\partial x^l}(x,t)\right| \le C\delta(x)^{\alpha/2-l} \quad for \quad l = 0,1,2,3,4,
   \end{equation}
   \begin{equation} \label{subeq:regularity-of-Au-on-x}
@@ -97,7 +97,7 @@ satisfies
 \end{subequations}
 for all $(x,t) \in (0, 2L)\times (0,T]$.
 \begin{remark}
-  \eqref{subeq:regularity-of-Au-on-x} can be derived from \eqref{subeq:regularity-of-Au-on-x} by
+  \eqref{subeq:regularity-of-Au-on-x} can be derived from \eqref{subeq:regularity-on-x} by
   \begin{equation*}
     \begin{aligned}
       I^{2-\alpha} u(x,t) &= \int_{0}^{x/2} + \int_{L+x/2}^{2L} u(y,t) \frac{|x-y|^{1-\alpha}}{\Gamma(2-\alpha)} dy \\
@@ -207,8 +207,9 @@ and
 \begin{lemma}
   The stiffness matrix $A$ has the following properties:
   \begin{enumerate}
-    \item The eigenvalues of $A$ are positive real numbers.
-    \item $A$ is positive definite, which means that the eigenvalues of $\frac{A+A^T}{2}$ are positive.
+    \item The eigenvalues of $A=H^{-1} D$ are positive real numbers.
+    Inparticular, $D$ is symmetric positive definite.
+    % \item $A$ is positive definite, which means that the eigenvalues of $\frac{A+A^T}{2}$ are positive.
     \item The eigenvectors of $A$ are orthogonal in space where $\langle u,v \rangle := uHv$, 
     where $H := \text{diag}\left( \frac{h_i+h_{i+1}}{2} \right)$.
     \item $(I+\tau A)^{-1} > O$ for any $\tau > 0$, and $A^{-1}>O$.
@@ -392,7 +393,7 @@ Here the discrete operator is $\mathcal{L}_{M,N} v_m^n = D_N^\gamma v_m^n - D_M^
   \end{equation*}
   According to \Cref{thm:LTE_t,lmm:stability} and the proof of \cite[Theorem 5.3]{Stynes:2017}, one has 
   \begin{equation*}
-    \|v^n\|_\infty \le C^\gamma N^{-\min\{2-\gamma, r_t\gamma\}}.
+    \|v^n\|_\infty \le C T^\gamma N^{-\min\{2-\gamma, r_t\gamma\}}.
   \end{equation*}
 \end{proof}
 

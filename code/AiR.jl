@@ -1,10 +1,12 @@
 using SpecialFunctions
 using LinearAlgebra
+using ComplexBigMatrices
 # using GR
 using OffsetArrays
 using Cubature
 using Plots
 
+# Float = Float64
 Float = BigFloat
 function function_f(x, α)
     f = 1
@@ -42,13 +44,13 @@ end
 Ω = (0, 1)
 
 
-α = 2-1//100000   #1+ 9 // 10
+α = 1+1//100   #1+ 9 // 10
 α = Float(α)
 
 @show 1 < α < 2
 
 r = 4/α
-N = 200
+N = 100
 
 
 # function num_err(Ω, r, α, N)
@@ -83,21 +85,33 @@ A = zeros(Float, 2N - 1, 2N - 1)
 Threads.@threads for i = 1:2N-1
     A[i, :] = 2 * CR * (A_1[i+1, :] / h[i+1] / (h[i] + h[i+1]) - A_1[i, :] / (h[i] * h[i+1]) + A_1[i-1, :] / h[i] / (h[i] + h[i+1]))
 end
+
+# Threads.@threads for i = 1:2N-1
+#     A[i, :] = 2 * CR * (A_1[i+1, :] / h[i+1]  - (h[i] + h[i+1]) / (h[i] * h[i+1]) * A_1[i, :]  + A_1[i-1, :] / h[i] )
+# end
 println("A is OK")
 
 
-function te_f1(x, α)
-    return x^(-α) + (1 - x)^(-α)
-end
+# function te_f1(x, α)
+#     return x^(-α) + (1 - x)^(-α)
+# end
 
-function te_f2(x, α)
-    return (abs(1//2-x)+ 1//N)^(1-α)
-end
+# function te_f2(x, α)
+#     return (abs(1//2-x)+ 1//N)^(1-α)
+# end
 
-xi = x[1:2N-1]
-TE = te_f1.(xi, α) #.+ te_f2.(xi, α)
+# xi = x[1:2N-1]
+# TE = te_f1.(xi, α) #.+ te_f2.(xi, α)
 # TE = te_f2.(xi, α) #.+ te_f2.(xi, α)
 
-Som = A \ TE
+# Som = A \ TE
 
-plot(xi, Som, legend=false)
+# plot(xi, Som, legend=false)
+
+# H = (h[1:2N-1] + h[2:2N]) / 2
+# H = diagm(H)
+
+B = convert(Array{Float64}, A)
+eigvals(B+B')
+
+# ComplexBigMatrices.eigen(Complex{BigFloat}.(A))
